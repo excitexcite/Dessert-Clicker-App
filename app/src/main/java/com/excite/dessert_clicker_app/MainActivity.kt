@@ -11,9 +11,9 @@ import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import com.excite.dessert_clicker_app.databinding.ActivityMainBinding
 
-//import com.example.android.dessertclicker.databinding.ActivityMainBinding
-
 const val TAG = "MainActivity"
+const val KEY_REVENUE = "revenue_key"
+const val KEY_DESSERT_SOLD = "dessert_sold_key"
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +53,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate() called")
+
+        if(savedInstanceState != null) {
+            revenue = savedInstanceState.getInt(KEY_REVENUE, 0);
+            dessertsSold = savedInstanceState.getInt(KEY_DESSERT_SOLD, 0);
+            showCurrentDessert()
+        }
+
         // Use Data Binding to get reference to the views
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
@@ -61,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Set the TextViews to the right values
-        binding.revenue = revenue
+        binding.revenue = revenue // revenue means amount of money that you have earned
         binding.amountSold = dessertsSold
 
         // Make sure the correct dessert is showing
@@ -96,6 +103,15 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         Log.d(TAG, "onRestart Called")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        Log.d(TAG, "onSaveInstanceState Called")
+        outState.putInt(KEY_REVENUE, revenue)
+        outState.putInt(KEY_DESSERT_SOLD, dessertsSold)
+
     }
 
     /**
